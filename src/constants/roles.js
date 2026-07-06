@@ -1,0 +1,13 @@
+export const ROLES = {
+  ADMIN: 'ADMIN',
+  DOCENTE: 'DOCENTE',
+  ALUMNO: 'ALUMNO',
+  PADRE: 'PADRE'
+};
+
+export const ATTENDANCE_STATUS = {
+  PRESENT: 'PRESENT',
+  ABSENT: 'ABSENT',
+  LATE: 'LATE',
+  EXCUSED: 'EXCUSED'
+};
