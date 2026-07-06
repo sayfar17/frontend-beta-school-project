@@ -2,7 +2,7 @@ name: Deploy to EC2
 
 on:
   push:
-    branches: [dev]
+    branches: [main]
 
 jobs:
   build-and-deploy:
@@ -11,17 +11,22 @@ jobs:
       - name: Checkout código
         uses: actions/checkout@v4
 
+      - name: Instalar pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 10   # ajusta a la versión de pnpm que uses localmente
+
       - name: Configurar Node
         uses: actions/setup-node@v4
         with:
-          node-version: '20'
-          cache: 'npm'
+          node-version: '24'
+          cache: 'pnpm'
 
       - name: Instalar dependencias
-        run: npm ci
+        run: pnpm install --frozen-lockfile
 
       - name: Build
-        run: npm run build   # genera dist/ (Vite) o build/ (CRA)
+        run: pnpm run build
 
       - name: Copiar archivos al servidor
         uses: appleboy/scp-action@v0.1.7
@@ -29,6 +34,6 @@ jobs:
           host: ${{ secrets.EC2_HOST }}
           username: ${{ secrets.EC2_USER }}
           key: ${{ secrets.EC2_SSH_KEY }}
-          source: "dist/*"        # cambia a "build/*" si usas CRA
+          source: "dist/*"
           target: "/var/www/mi-app"
           strip_components: 1
